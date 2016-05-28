@@ -9,5 +9,5 @@ This is essentially the first iteration, and may contain bugs and performance is
 
 ```
 $ go get github.com/bradleyfalzon/udp-proxy
-$ udp-proxy -listen :1234 -backends 10.0.0.1:1234,10.0.0.2:1234
+$ udp-quickest-responder -listen :1234 -backends 10.0.0.1:1234,10.0.0.2:1234
 ```
