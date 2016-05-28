@@ -60,7 +60,7 @@ func main() {
 	}
 }
 
-func handlePacket(msg []byte, raddr *net.UDPAddr, conn *net.UDPConn) {
+func handlePacket(msg []byte, raddr *net.UDPAddr, rconn *net.UDPConn) {
 	// Listen on port for respones
 	laddr, err := net.ResolveUDPAddr("udp", ":0")
 	if err != nil {
@@ -71,7 +71,7 @@ func handlePacket(msg []byte, raddr *net.UDPAddr, conn *net.UDPConn) {
 		log.Fatal("Could not listen for backend repsonse:", err)
 	}
 
-	go func(raddr *net.UDPAddr, conn, lconn *net.UDPConn) {
+	go func(raddr *net.UDPAddr, rconn, lconn *net.UDPConn) {
 		rbuf := make([]byte, 1500)
 
 		// Receive the response
@@ -81,11 +81,11 @@ func handlePacket(msg []byte, raddr *net.UDPAddr, conn *net.UDPConn) {
 		}
 
 		// Send response back to client
-		conn.WriteToUDP(rbuf[:n], raddr)
+		rconn.WriteToUDP(rbuf[:n], raddr)
 
 		// Stop listening for other responses
 		lconn.Close()
-	}(raddr, conn, lconn)
+	}(raddr, rconn, lconn)
 
 	// Send the request to all backends
 	for _, be := range backends {
